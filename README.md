@@ -1,77 +1,35 @@
-# Korean Daily Helper
+# Real Talk, Real Confidence: Korean Daily Helper
 
-A web app for learning everyday Korean slang, net-speak, and casual expressions used by young people in Seoul.
+> **Implementation of the Daily Language Learning Model for International Students.**
 
-## What it does
+This project is the technical implementation of the language learning model proposed in my PPT. Unlike traditional textbooks, this web app focuses on the gap between textbook Korean and the real-world slang, net-speak, and casual expressions used by young people in Korea.
 
-- **Example Mode**: Describe a scene in any language, get 3 natural Korean sentences young people actually say. Each comes with an English translation.
-- **Dialogue Mode**: Practice back-and-forth conversation. The AI sets a scene, shows a Korean dialogue, then suggests possible replies you could say next — with translations.
-- **TTS**: Click the speaker icon next to any Korean sentence to hear it spoken aloud.
-- **Favorites**: Save sentences you want to review later.
+## 🌟 Key Features
 
-## Tech stack
+* **Example Mode (Contextual Prompting)**: Input any social scenario (e.g., "Ordering trendy dessert in Seongsu-dong") and get 3 natural, casual Korean sentences with English translations.
+* **Dialogue Mode (Social Role-play)**: Practice back-and-forth social interactions. The AI generates context-aware replies to help build conversational muscle memory.
+* **Integrated TTS**: Master the rhythm and intonation of casual expressions with real-time pronunciation.
 
-React 18 + TypeScript + Vite + Tailwind CSS + shadcn/ui
+## ⚙️ How to Configure and Run (For Grading)
 
-## Run locally
+The application requires an OpenAI-compatible API key to handle language generation. **For security reasons, all API keys have been removed from the source code.**
 
-```bash
-# 1. Install dependencies
-npm install
+To test the interactive features, you must configure the settings after launching the app locally:
 
-# 2. Start dev server
-npm run dev
-```
+1. **Setup**: Run `npm install` and `npm run dev`. Open `localhost:5173`.
+2. **Configure**: Click the **Settings (Gear icon ⚙️)** in the app header.
+3. **Fill Credentials**:
+   * **API URL**: Enter your endpoint (e.g., `https://models.inference.ai.azure.com`).
+   * **API Key**: Enter your personal API key.
+   * **Model**: Specify the model (e.g., `gpt-4o-mini`).
+4. **Result**: The "isReady" status will activate, and language interaction will be enabled.
 
-Then open `http://localhost:5173` in your browser.
+## 🛠️ Tech Stack
 
-## Build for production
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui
+- **AI Integration**: OpenAI-compatible API Interface
 
-```bash
-npm run build
-```
-
-Output goes to `dist/`.
-
-## Upload to GitHub
-
-```bash
-# Init repo
-git init
-
-# Add all files
-git add .
-
-# First commit
-git commit -m "Initial commit"
-
-# Add your remote (replace with your actual repo URL)
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-
-# Push
-git push -u origin main
-```
-
-## Configure API
-
-The app uses a generic OpenAI-compatible API endpoint. Open the settings gear icon in the app header and fill in:
-
-- **API URL** — your endpoint, e.g. `https://models.inference.ai.azure.com`
-- **API Key** — your key
-- **Model** — e.g. `gpt-4o-mini`
-
-If left empty, the app falls back to the browser's built-in `speechSynthesis` for Korean TTS.
-
-## Supabase Edge Functions (optional)
-
-Three Edge Functions live in `supabase/functions/`:
-
-- `korean-chat` — proxies chat completions to your LLM API
-- `speech-to-text` — STT proxy (replace `YOUR_API_GATEWAY` in the source)
-- `text-to-speech` — TTS proxy (replace `YOUR_API_GATEWAY` in the source)
-
-Deploy with the Supabase CLI after updating the placeholder URLs.
-
-## License
-
-MIT
+---
+**Author**: Gangding Yu (20223309)  
+**Submitted for**: Korean Language Learning Model Proposal Implementation.
