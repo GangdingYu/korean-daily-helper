@@ -1,35 +1,39 @@
 # Real Talk, Real Confidence: Korean Daily Helper
 
-> **Implementation of the Daily Language Learning Model for International Students.**
+> **Technical Implementation of the Daily Language Learning Model for International Students.**
 
-This project is the technical implementation of the language learning model proposed in my PPT. Unlike traditional textbooks, this web app focuses on the gap between textbook Korean and the real-world slang, net-speak, and casual expressions used by young people in Korea.
+**Live Demo:** [https://korean-helper-chi.vercel.app](https://korean-helper-chi.vercel.app)  
+*(Note: For security reasons, please configure your API Key via the ⚙️ icon in the app to enable AI features.)*
 
-## 🌟 Key Features
+---
 
-* **Example Mode (Contextual Prompting)**: Input any social scenario (e.g., "Ordering trendy dessert in Seongsu-dong") and get 3 natural, casual Korean sentences with English translations.
-* **Dialogue Mode (Social Role-play)**: Practice back-and-forth social interactions. The AI generates context-aware replies to help build conversational muscle memory.
-* **Integrated TTS**: Master the rhythm and intonation of casual expressions with real-time pronunciation.
+## 🌟 Project Overview
+This project is the functional implementation of the **Daily Language Learning Model** proposed in my presentation. It aims to bridge the gap between academic Korean and the actual casual expressions, slang, and net-speak used by young people in Korea today.
 
-## ⚙️ How to Configure and Run (For Grading)
+## 🚀 Key Features
 
-The application requires an OpenAI-compatible API key to handle language generation. **For security reasons, all API keys have been removed from the source code.**
+* **Example Mode**: Generates 3 context-specific, natural Korean sentences based on any user-described social scenario (e.g., "Ordering at a trendy cafe").
+* **Dialogue Mode**: Interactive social role-play where the AI simulates real-world conversations and suggests appropriate casual replies.
+* **Integrated TTS**: Built-in Text-to-Speech to help students master the natural intonation and rhythm of casual Korean.
 
-To test the interactive features, you must configure the settings after launching the app locally:
+## ⚙️ How to Test
 
-1. **Setup**: Run `npm install` and `npm run dev`. Open `localhost:5173`.
-2. **Configure**: Click the **Settings (Gear icon ⚙️)** in the app header.
-3. **Fill Credentials**:
-   * **API URL**: Enter your endpoint (e.g., `https://models.inference.ai.azure.com`).
-   * **API Key**: Enter your personal API key.
-   * **Model**: Specify the model (e.g., `gpt-4o-mini`).
-4. **Result**: The "isReady" status will activate, and language interaction will be enabled.
+The application is a client-side interface that uses an OpenAI-compatible API. To observe the live language generation:
+
+1. Visit the **Live Demo** link above.
+2. Click the **Settings (Gear icon ⚙️)** in the header.
+3. Enter your **API URL**, **API Key**, and **Model** (e.g., `gpt-4o-mini`).
+4. Once saved, the AI interaction will be fully functional.
+
+## 📸 Demonstration
+![App Screenshot](./screenshot.png)
+*(Note: If the image above is not visible, please refer to the assets in the repository.)*
 
 ## 🛠️ Tech Stack
-
 - **Frontend**: React 18, TypeScript, Vite
 - **Styling**: Tailwind CSS, shadcn/ui
-- **AI Integration**: OpenAI-compatible API Interface
+- **Deployment**: Vercel
 
 ---
 **Author**: Gangding Yu (20223309)  
-**Submitted for**: Korean Language Learning Model Proposal Implementation.
+**Context**: Final Project Implementation for the Language Learning Model Proposal.
