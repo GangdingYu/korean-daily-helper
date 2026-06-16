@@ -1,39 +1,52 @@
-# Real Talk, Real Confidence: Korean Daily Helper
+# Korean Daily Helper
 
-> **Technical Implementation of the Daily Language Learning Model for International Students.**
+A small web app for learning everyday Korean—slang, casual speech, and scene-based dialogue. Built as the implementation companion to my term project iteration report.
 
-**Live Demo:** [https://korean-helper-chi.vercel.app](https://korean-helper-chi.vercel.app)  
-*(Note: For security reasons, please configure your API Key via the ⚙️ icon in the app to enable AI features.)*
+**Live demo:** [korean-helper-chi.vercel.app](https://korean-helper-chi.vercel.app)
 
----
+Configure your own API key in the app (gear icon in the header) before chatting.
 
-## Project Overview
-This project is the functional implementation of the **Daily Language Learning Model** proposed in my presentation. It aims to bridge the gap between academic Korean and the actual casual expressions, slang, and net-speak used by young people in Korea today.
+If you use Supabase voice features, set the following environment variables in your Edge Functions:
+- `INTEGRATIONS_API_KEY`
+- `CHAT_GATEWAY_URL` (for `korean-chat`)
+- `TTS_GATEWAY_URL` and `STT_GATEWAY_URL` (for `text-to-speech` and `speech-to-text`)
 
-##  Key Features
+## Features
 
-* **Example Mode**: Generates 3 context-specific, natural Korean sentences based on any user-described social scenario (e.g., "Ordering at a trendy cafe").
-* **Dialogue Mode**: Interactive social role-play where the AI simulates real-world conversations and suggests appropriate casual replies.
-* **Integrated TTS**: Built-in Text-to-Speech to help students master the natural intonation and rhythm of casual Korean.
+- **Examples** — Describe a situation; get three natural Korean lines with translations.
+- **Dialogue** — Role-play a scene; tap suggested replies to continue.
+- **Favorites & TTS** — Save lines and hear them with browser speech.
 
-##  How to Test
+## Prompt design (iteration report)
 
-The application is a client-side interface that uses an OpenAI-compatible API. To observe the live language generation:
+The system prompt is built in `src/lib/prompts.ts` and matches the report in plain terms:
 
-1. Visit the **Live Demo** link above.
-2. Click the **Settings (Gear icon ⚙️)** in the header.
-3. Enter your **API URL**, **API Key**, and **Model** (e.g., `gpt-4o-mini`).
-4. Once saved, the AI interaction will be fully functional.
+1. **Register from context** — Keyword hints in `registerHint.ts` nudge 반말 / 해요체 / 합쇼체 from the scene (friends, strangers, romance, workplace).
+2. **Less repetition** — Three examples must vary in opening, ending, and tone; a short contrast block shows what to avoid.
+3. **Reasoning kept internal** — The model is told to decide scene and register first, without printing that analysis.
 
-##  Demonstration
-![App Screenshot](./screenshot.png)
-*(Note: If the image above is not visible, please refer to the assets in the repository.)*
+Output markers (`💡`, `「Translation」`, `「译」`) live in `outputFormat.ts` and are shared with the message parser.
 
-## Tech Stack
-- **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Tailwind CSS, shadcn/ui
-- **Deployment**: Vercel
+## Run locally
 
----
-**Author**: Gangding Yu (20223309)  
-**Context**: Final Project Implementation for the Language Learning Model Proposal.
+```bash
+pnpm install
+pnpm dev
+```
+
+Open the URL Vite prints, then set **API URL**, **API Key**, and **Model** (e.g. `gpt-4o-mini`) under Settings. Works with any OpenAI-compatible endpoint.
+
+```bash
+pnpm build   # production build
+pnpm lint    # biome + tsc
+```
+
+## Stack
+
+React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui. Deployed on Vercel.
+
+## Author
+
+Gangding Yu (20223309) — Term Project #2, Korean Daily Helper.
+
+![Screenshot](./screenshot.png)

@@ -2,6 +2,11 @@ import React from "react";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { TTSState } from "@/hooks/useTTS";
 import { t } from "@/lib/i18n";
+import {
+  isTranslationLine,
+  MARKER_SUGGESTIONS,
+  stripTranslationPrefix,
+} from "@/lib/outputFormat";
 import { cn } from "@/lib/utils";
 import type { FavoriteSource } from "@/types/types";
 import { ChatMessage as ChatMessageType } from "@/types/types";
@@ -26,8 +31,7 @@ interface SuggestedReply {
 }
 
 function splitDialogueContent(content: string): { main: string; suggestions: string | null } {
-  const marker = "💡";
-  const idx = content.indexOf(marker);
+  const idx = content.indexOf(MARKER_SUGGESTIONS);
   if (idx === -1) return { main: content, suggestions: null };
   return {
     main: content.slice(0, idx).trimEnd(),
@@ -43,14 +47,14 @@ function parseSuggestions(raw: string, messageId: string): SuggestedReply[] {
   let idx = 0;
 
   for (const line of lines) {
-    if (line.startsWith("💡") || line.includes("You can say")) {
+    if (line.startsWith(MARKER_SUGGESTIONS) || line.includes("You can say")) {
       continue;
     }
-    if (line.startsWith("「Translation")) {
+    if (isTranslationLine(line)) {
       if (pending !== null) {
         results.push({
           korean: pending,
-          translation: line.replace(/^「Translation」/, "").trim(),
+          translation: stripTranslationPrefix(line),
           id: `${messageId}-reply-${idx++}`,
         });
         pending = null;
@@ -78,8 +82,8 @@ function parseBlocks(content: string, messageId: string): ContentBlock[] {
       }
       continue;
     }
-    if (trimmed.startsWith("「Translation")) {
-      blocks.push({ type: "translation", content: trimmed.replace(/^「Translation」/, "").trim(), id: "" });
+    if (isTranslationLine(trimmed)) {
+      blocks.push({ type: "translation", content: stripTranslationPrefix(trimmed), id: "" });
       continue;
     }
     const koreanCount = (trimmed.match(/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]/g) || []).length;
@@ -304,8 +308,8 @@ function renderStreamingContent(content: string) {
     const isTitleLine = /^[🗣📝💬📌✨🌟💡🔹]/.test(line.trim());
     const koreanCount = (line.match(/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]/g) || []).length;
     const hasKorean = koreanCount >= 3 && !isTitleLine;
-    const isTranslation = line.trim().startsWith("「Translation");
-    const displayLine = isTranslation ? line.replace(/^「Translation」/, "").trim() : line;
+    const isTranslation = isTranslationLine(line);
+    const displayLine = isTranslation ? stripTranslationPrefix(line) : line;
     return (
       <React.Fragment key={idx}>
         <span className={cn(

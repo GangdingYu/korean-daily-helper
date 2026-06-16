@@ -6,6 +6,8 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const TTS_GATEWAY_URL = Deno.env.get("TTS_GATEWAY_URL") ?? "";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -32,10 +34,16 @@ serve(async (req) => {
       );
     }
 
-    // 调用你的 TTS API
-    // TODO: 替换为你自己的 API 网关地址
+    if (!TTS_GATEWAY_URL) {
+      return new Response(
+        JSON.stringify({ error: "TTS_GATEWAY_URL not configured" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Call your TTS gateway
     const ttsResponse = await fetch(
-      "https://YOUR_API_GATEWAY/v1/t2a_v2",
+      TTS_GATEWAY_URL,
       {
         method: "POST",
         headers: {

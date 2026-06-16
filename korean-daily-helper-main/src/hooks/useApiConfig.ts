@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 const CFG_KEY = "api_config";
 
@@ -12,7 +12,7 @@ export interface ApiConfig {
 
 const defaults: ApiConfig = {
   url: "https://models.inference.ai.azure.com",
-  key: "", // personal key input 2026-04
+  key: "",
   model: "gpt-4o-mini",
   systemPrompt: "",
   ttsUrl: "",

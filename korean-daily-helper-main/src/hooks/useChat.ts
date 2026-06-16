@@ -2,33 +2,17 @@ import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 import { getApiConfig } from "@/hooks/useApiConfig";
 import { t } from "@/lib/i18n";
+import { buildSystemPrompt } from "@/lib/prompts";
 import { ApiMessage, ChatMessage, ChatMode } from "@/types/types";
 
 const genId = () => `msg_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-
-const PROMPT_EXAMPLES =
-  "You are a Korean daily expressions coach.\n" +
-  "\nRules:\n" +
-  "1. Give exactly 3 natural Korean example sentences for the scene the user described.\n" +
-  "2. Each example: Korean text + English translation.\n" +
-  "3. The Korean must sound like real spoken Korean from a 20-something. Use contractions, fillers, and internet slang naturally.\n" +
-  "4. Do NOT add grammar analysis, cultural background, or extra explanation. Just the 3 examples.\n" +
-  "5. Format: numbered list only.\n";
-
-const PROMPT_DIALOGUE =
-  "You are a Korean conversation partner.\n" +
-  "\nRules:\n" +
-  "1. Start with 1 sentence describing the scene in English.\n" +
-  "2. Show a natural Korean dialogue between 2 people. Use emoji. Use 반말 for friends, 해요체 for strangers.\n" +
-  "3. After the dialogue, give 2-3 possible replies the USER could say next. Each: Korean text + English translation.\n" +
-  "4. For each user reply, show what the OTHER person would say back in Korean.\n" +
-  "5. The dialogue must feel like real friends talking on a Seoul street. Use contractions, fillers (아, 음, 그냥), emotional particles (ㅋㅋ, ㅠㅠ).\n" +
-  "6. Do NOT add grammar analysis or extra explanation. Keep it clean and natural.\n";
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
 
   const sendMessage = useCallback(async (userInput: string, mode: ChatMode = "examples") => {
     if (!userInput.trim() || isLoading) return;
@@ -39,21 +23,22 @@ export function useChat() {
       return;
     }
 
+    const trimmed = userInput.trim();
     const userMsg: ChatMessage = {
       id: genId(),
       role: "user",
-      content: userInput.trim(),
+      content: trimmed,
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
-    const history: ApiMessage[] = [...messages.slice(-9), userMsg].map((m) => ({
+    const history: ApiMessage[] = [...messagesRef.current.slice(-9), userMsg].map((m) => ({
       role: m.role,
       content: m.content,
     }));
 
-    const systemContent = cfg.systemPrompt || (mode === "dialogue" ? PROMPT_DIALOGUE : PROMPT_EXAMPLES);
+    const systemContent = buildSystemPrompt(mode, trimmed, cfg.systemPrompt);
 
     const assistantId = genId();
     const assistantMsg: ChatMessage = {
@@ -108,9 +93,9 @@ export function useChat() {
         buffer = lines.pop() ?? "";
 
         for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed || !trimmed.startsWith("data:")) continue;
-          const dataStr = trimmed.slice(5).trim();
+          const trimmedLine = line.trim();
+          if (!trimmedLine || !trimmedLine.startsWith("data:")) continue;
+          const dataStr = trimmedLine.slice(5).trim();
           if (dataStr === "[DONE]") continue;
           try {
             const parsed = JSON.parse(dataStr);
@@ -123,7 +108,7 @@ export function useChat() {
                 )
               );
             }
-          } catch { /* skip bad chunk */ }
+          } catch { /* malformed chunk */ }
         }
       }
 
@@ -146,7 +131,7 @@ export function useChat() {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, isLoading]);
+  }, [isLoading]);
 
   const stopStreaming = useCallback(() => {
     if (abortRef.current) {

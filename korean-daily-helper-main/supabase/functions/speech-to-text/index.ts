@@ -6,6 +6,8 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const STT_GATEWAY_URL = Deno.env.get("STT_GATEWAY_URL") ?? "";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -29,10 +31,16 @@ serve(async (req) => {
       );
     }
 
-    // 调用你的语音识别 API
-    // TODO: 替换为你自己的 API 网关地址
+    if (!STT_GATEWAY_URL) {
+      return new Response(
+        JSON.stringify({ error: "STT_GATEWAY_URL not configured" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Call your STT gateway
     const sttResponse = await fetch(
-      "https://YOUR_API_GATEWAY/server_api",
+      STT_GATEWAY_URL,
       {
         method: "POST",
         headers: {
