@@ -7,16 +7,16 @@
 
 ---
 
-## 🌟 Project Overview
+## Project Overview
 This project is the functional implementation of the **Daily Language Learning Model** proposed in my presentation. It aims to bridge the gap between academic Korean and the actual casual expressions, slang, and net-speak used by young people in Korea today.
 
-## 🚀 Key Features
+##  Key Features
 
 * **Example Mode**: Generates 3 context-specific, natural Korean sentences based on any user-described social scenario (e.g., "Ordering at a trendy cafe").
 * **Dialogue Mode**: Interactive social role-play where the AI simulates real-world conversations and suggests appropriate casual replies.
 * **Integrated TTS**: Built-in Text-to-Speech to help students master the natural intonation and rhythm of casual Korean.
 
-## ⚙️ How to Test
+##  How to Test
 
 The application is a client-side interface that uses an OpenAI-compatible API. To observe the live language generation:
 
@@ -25,11 +25,11 @@ The application is a client-side interface that uses an OpenAI-compatible API. T
 3. Enter your **API URL**, **API Key**, and **Model** (e.g., `gpt-4o-mini`).
 4. Once saved, the AI interaction will be fully functional.
 
-## 📸 Demonstration
+##  Demonstration
 ![App Screenshot](./screenshot.png)
 *(Note: If the image above is not visible, please refer to the assets in the repository.)*
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Frontend**: React 18, TypeScript, Vite
 - **Styling**: Tailwind CSS, shadcn/ui
 - **Deployment**: Vercel
